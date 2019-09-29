@@ -1,6 +1,5 @@
 #include <stdio.h>
-
-int pipes(int c, int *argc, char ***argv);
+#include "../include/pipes.h"
 
 int main(int argc, char **argv)
 {
