@@ -6,7 +6,8 @@ OBJ_DIR = obj
 MAIN_SRC = src/main.c
 MAIN_OBJ = $(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(MAIN_SRC)))
 
-SRC = $(filter-out $(MAIN_SRC),$(wildcard src/*.c) $(wildcard src/*/*.c))
+# SRC = $(filter-out $(MAIN_SRC),$(wildcard src/*.c) $(wildcard src/*/*.c))
+SRC = $(wildcard src/*.c) $(wildcard src/*/*.c)
 OBJ = $(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(SRC)))
 HEADERS = $(wildcard include/*.h) $(wildcard include/*/*.h)
 TARGET = $(TARGET_DIR)/$(NAME)
@@ -49,7 +50,7 @@ $(TESTS_DIR)/$(TARGET_DIR)/%: $(TESTS_DIR)/$(OBJ_DIR)/%.o $(OBJ)
 .PHONY: compile run clean dirs test
 
 clean:
-	rm -rf obj bin
+	rm -rf bin
 	rm -rf tests/obj tests/bin tests/log
 
 compile: $(NECESSARY_DIRS) $(TARGET)

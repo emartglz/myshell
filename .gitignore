@@ -1,2 +1,4 @@
 *.o
 bin/myshell
+a.out
+.vscode/
