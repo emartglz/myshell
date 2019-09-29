@@ -2,13 +2,11 @@ NAME = myshell
 
 TARGET_DIR = bin
 OBJ_DIR = obj
+SRC_DIR = src
 
-MAIN_SRC = src/main.c
-MAIN_OBJ = $(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(MAIN_SRC)))
+SRC = $(wildcard $(SRC_DIR)/*.c)
+OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-# SRC = $(filter-out $(MAIN_SRC),$(wildcard src/*.c) $(wildcard src/*/*.c))
-SRC = $(wildcard src/*.c) $(wildcard src/*/*.c)
-OBJ = $(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(SRC)))
 HEADERS = $(wildcard include/*.h) $(wildcard include/*/*.h)
 TARGET = $(TARGET_DIR)/$(NAME)
 
@@ -29,10 +27,10 @@ CFLAGS = -c -Iinclude
 
 VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes
 
-$(OBJ_DIR)/%.o: %.c $(HEADERS)
+$(OBJ): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) $< -o $@
 
-$(TARGET): $(OBJ) $(MAIN_OBJ)
+$(TARGET): $(OBJ)
 	$(CC) $^ -o $@
 
 $(sort $(NECESSARY_DIRS)):
@@ -47,7 +45,7 @@ $(TESTS_DIR)/$(OBJ_DIR)/%.o: $(TESTS_DIR)/%.c $(HEADERS)
 $(TESTS_DIR)/$(TARGET_DIR)/%: $(TESTS_DIR)/$(OBJ_DIR)/%.o $(OBJ)
 	$(CC) $^ -o $@
 
-.PHONY: compile run clean dirs test
+.PHONY: compile run
 
 clean:
 	rm -rf bin
